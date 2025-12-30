@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YMC Cruises</title>
+
+    <style>
+        :root {
+            --bg: #eaf7ff;
+            --card: #ffffff;
+            --accent: #1daeff;
+            --accent-soft: rgba(29, 174, 255, 0.2);
+            --text: #0b2a3d;
+            --muted: #5c7c8f;
+            --success: #27d89c;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: linear-gradient(180deg, #bfe9ff, #eaf7ff);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* 🌊 WAVES */
+        .wave {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 140px;
+            background: rgba(29, 174, 255, 0.25);
+            border-radius: 100% 100% 0 0;
+            animation: waveMove 12s linear infinite;
+            z-index: -1;
+        }
+
+        .wave:nth-child(2) {
+            height: 180px;
+            opacity: 0.18;
+            animation-duration: 18s;
+        }
+
+        @keyframes waveMove {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* ---------- HEADER ---------- */
+        header {
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        button.primary {
+            background: linear-gradient(135deg, var(--accent), #5fd0ff);
+            border: none;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 10px 25px var(--accent-soft);
+            transition: transform 0.2s ease;
+        }
+
+        button.primary:hover {
+            transform: translateY(-2px);
+        }
+
+        /* ---------- MAIN ---------- */
+        main {
+            padding: 24px;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        /* ---------- BANNER ---------- */
+        .banner {
+            background: linear-gradient(135deg, #e6f7ff, #ffffff);
+            border-radius: 22px;
+            padding: 20px;
+            margin-bottom: 22px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            animation: fadeUp 0.6s ease;
+        }
+
+        .banner h2 {
+            margin: 0 0 6px;
+            color: var(--accent);
+        }
+
+        /* ---------- SUMMARY CARD ---------- */
+        .summary {
+            background: white;
+            border-radius: 22px;
+            padding: 20px;
+            margin-bottom: 22px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            animation: fadeUp 0.6s ease;
+        }
+
+        .summary div {
+            background: #f4fbff;
+            padding: 14px;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        /* ---------- SCHEDULE ---------- */
+        .schedule {
+            background: var(--card);
+            border-radius: 22px;
+            padding: 22px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.08);
+            animation: fadeUp 0.6s ease;
+        }
+
+        .day {
+            margin-bottom: 18px;
+        }
+
+        .day ul {
+            margin: 0;
+            padding-left: 18px;
+            color: var(--muted);
+        }
+
+        /* ---------- MODAL ---------- */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-card {
+            background: white;
+            border-radius: 26px;
+            padding: 26px;
+            width: 100%;
+            max-width: 520px;
+            animation: scaleIn 0.4s ease;
+        }
+
+        /* ---------- CRUISES ---------- */
+        .cruise-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 14px;
+        }
+
+        .cruise {
+            background: #f4fbff;
+            border-radius: 18px;
+            padding: 18px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            text-align: center;
+        }
+
+        .cruise.selected {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px var(--accent-soft);
+        }
+
+        /* ---------- DAYS ---------- */
+        .days {
+            display: flex;
+            gap: 10px;
+            margin: 14px 0 20px;
+        }
+
+        .days button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 14px;
+            border: 2px solid #d3e9f5;
+            background: transparent;
+        }
+
+        .days button.selected {
+            border-color: var(--accent);
+            background: var(--accent-soft);
+        }
+
+        /* ---------- CONFETTI ---------- */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: red;
+            top: -10px;
+            animation: fall 2.5s linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* ---------- ANIMATIONS ---------- */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="wave"></div>
+    <div class="wave"></div>
+
+    <header>
+        <h1>YMC Cruises</h1>
+        <button class="primary" onclick="openBooking()">Book a Cruise</button>
+    </header>
+
+    <main id="main"></main>
+
+    <div class="modal" id="modal">
+        <div class="modal-card" id="modalContent">
+            <h2>Select Your Cruise</h2>
+
+            <div class="cruise-list">
+                <div class="cruise" onclick="selectCruise(this,'YMC Seaside')">🌴 YMC Seaside</div>
+                <div class="cruise" onclick="selectCruise(this,'YMC Royal')">👑 YMC Royal</div>
+                <div class="cruise" onclick="selectCruise(this,'YMC Star')">⭐ YMC Star</div>
+            </div>
+
+            <h3>How many days?</h3>
+            <div class="days">
+                <button onclick="selectDays(this,1)">1 Day</button>
+                <button onclick="selectDays(this,2)">2 Days</button>
+                <button onclick="selectDays(this,3)">3 Days</button>
+            </div>
+
+            <button class="primary" style="width:100%;" onclick="bookCruise()">Book Now</button>
+        </div>
+    </div>
+
+    <script>
+        let selectedCruise = null;
+        let selectedDays = null;
+
+        function render()
+        {
+            const booking = JSON.parse(localStorage.getItem("ymcBooking"));
+            const main = document.getElementById("main");
+
+            main.innerHTML = `
+    ${booking ? `
+      <div class="banner">
+        <h2>🚢 Your Cruise</h2>
+        <strong>${booking.cruise}</strong> • ${booking.days} day(s)
+      </div>
+
+      <div class="summary">
+        <div>🛳 Cruise<br><strong>${booking.cruise}</strong></div>
+        <div>📆 Duration<br><strong>${booking.days} Days</strong></div>
+        <div>🌊 Status<br><strong>Booked</strong></div>
+      </div>
+    ` : ``}
+
+    <div class="schedule">
+      <h2>Daily Cruise Schedule</h2>
+
+      <div class="day">
+        <h3>Day 1 – Welcome Aboard</h3>
+        <ul>
+          <li>Towel Folding Fun</li>
+          <li>Your Cabin Will Be Ready</li>
+          <li>Goodbye Party for Today</li>
+        </ul>
+      </div>
+
+      <div class="day">
+        <h3>Day 2 – Happy Last Day!</h3>
+        <ul>
+          <li>Answer Show with Yosef</li>
+          <li>New Year's Party</li>
+          <li>Dance Party</li>
+          <li>Holiday Celebration</li>
+          <li>Departure</li>
+        </ul>
+      </div>
+    </div>
+  `;
+        }
+
+        function openBooking()
+        {
+            document.getElementById("modal").classList.add("active");
+        }
+
+        function selectCruise(el, name)
+        {
+            document.querySelectorAll(".cruise").forEach(c => c.classList.remove("selected"));
+            el.classList.add("selected");
+            selectedCruise = name;
+        }
+
+        function selectDays(el, days)
+        {
+            document.querySelectorAll(".days button").forEach(b => b.classList.remove("selected"));
+            el.classList.add("selected");
+            selectedDays = days;
+        }
+
+        function bookCruise()
+        {
+            if (!selectedCruise || !selectedDays) return alert("Select everything!");
+
+            localStorage.setItem("ymcBooking", JSON.stringify({
+                cruise: selectedCruise,
+                days: selectedDays
+            }));
+
+            confetti();
+            document.getElementById("modal").classList.remove("active");
+            render();
+        }
+
+        function confetti()
+        {
+            for (let i = 0; i < 80; i++)
+            {
+                const c = document.createElement("div");
+                c.className = "confetti";
+                c.style.left = Math.random() * 100 + "vw";
+                c.style.background = `hsl(${Math.random() * 360},100%,50%)`;
+                c.style.animationDuration = (Math.random() * 1.5 + 1.5) + "s";
+                document.body.appendChild(c);
+                setTimeout(() => c.remove(), 3000);
+            }
+        }
+
+        render();
+    </script>
+
+</body>
+
+</html>

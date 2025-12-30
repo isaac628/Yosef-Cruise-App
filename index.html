@@ -8,15 +8,16 @@
 
    <style>
 :root {
+    --bg: #eaf7ff;
+    --card: #ffffff;
     --accent: #1daeff;
-    --accent2: #7f5cff;
-    --accent3: #27ffd2;
-    --glass: rgba(255,255,255,.55);
-    --border: rgba(255,255,255,.35);
+    --accent2: #5f8bff;
+    --accent-soft: rgba(29,174,255,.25);
     --text: #0b2a3d;
+    --muted: #5c7c8f;
+    --success: #27d89c;
 }
 
-/* ---------- BASE ---------- */
 * {
     box-sizing: border-box;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
@@ -24,46 +25,42 @@
 
 body {
     margin: 0;
-    min-height: 100vh;
-    background:
-        radial-gradient(circle at 20% 20%, #7fd9ff, transparent 40%),
-        radial-gradient(circle at 80% 30%, #8b7bff, transparent 40%),
-        radial-gradient(circle at 50% 80%, #2dffe2, transparent 40%),
-        linear-gradient(120deg, #ccefff, #eefaff);
-    background-size: 200% 200%;
-    animation: bgMove 25s ease infinite;
+    background: linear-gradient(180deg, #bfe9ff, #eaf7ff, #ffffff);
+    background-size: 100% 200%;
+    animation: skyDrift 20s ease infinite;
     color: var(--text);
+    min-height: 100vh;
     overflow-x: hidden;
 }
 
-@keyframes bgMove {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+@keyframes skyDrift {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 0% 100%; }
+    100% { background-position: 0% 0%; }
 }
 
-/* ---------- WAVES ---------- */
+/* 🌊 WAVES */
 .wave {
     position: fixed;
-    bottom: -40px;
+    bottom: 0;
     left: 0;
     width: 200%;
-    height: 180px;
-    background: linear-gradient(90deg,
-        rgba(29,174,255,.4),
-        rgba(127,92,255,.4),
-        rgba(39,255,210,.4)
+    height: 140px;
+    background: linear-gradient(
+        90deg,
+        rgba(29,174,255,.35),
+        rgba(95,139,255,.35),
+        rgba(29,174,255,.35)
     );
     border-radius: 100% 100% 0 0;
     animation: waveMove 14s linear infinite;
-    filter: blur(8px);
     z-index: -1;
 }
 
 .wave:nth-child(2) {
-    height: 240px;
+    height: 180px;
+    opacity: .25;
     animation-duration: 22s;
-    opacity: .6;
 }
 
 @keyframes waveMove {
@@ -73,7 +70,7 @@ body {
 
 /* ---------- HEADER ---------- */
 header {
-    padding: 24px;
+    padding: 20px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -81,7 +78,7 @@ header {
 
 header h1 {
     margin: 0;
-    font-size: 24px;
+    font-size: 22px;
     background: linear-gradient(90deg, var(--accent), var(--accent2));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -89,37 +86,24 @@ header h1 {
 
 /* ---------- BUTTON ---------- */
 button.primary {
-    position: relative;
     background: linear-gradient(135deg, var(--accent), var(--accent2));
     border: none;
     color: white;
-    padding: 14px 20px;
-    border-radius: 16px;
-    font-weight: 700;
+    padding: 12px 18px;
+    border-radius: 14px;
+    font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 15px 40px rgba(29,174,255,.45);
-    transition: transform .25s ease, box-shadow .25s ease;
-    overflow: hidden;
-}
-
-button.primary::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(120deg, transparent, rgba(255,255,255,.6), transparent);
-    transform: translateX(-100%);
-    animation: shine 2.5s infinite;
-}
-
-@keyframes shine {
-    0% { transform: translateX(-100%); }
-    60% { transform: translateX(100%); }
-    100% { transform: translateX(100%); }
+    box-shadow: 0 12px 30px var(--accent-soft);
+    transition: transform .2s ease, box-shadow .2s ease;
 }
 
 button.primary:hover {
-    transform: translateY(-4px) scale(1.03);
-    box-shadow: 0 20px 55px rgba(127,92,255,.55);
+    transform: translateY(-3px);
+    box-shadow: 0 18px 40px rgba(29,174,255,.4);
+}
+
+button.primary:active {
+    transform: translateY(0);
 }
 
 /* ---------- MAIN ---------- */
@@ -129,68 +113,54 @@ main {
     margin: auto;
 }
 
-/* ---------- GLASS CARDS ---------- */
+/* ---------- CARDS ---------- */
 .banner,
 .summary,
-.schedule,
-.modal-card {
-    background: var(--glass);
-    backdrop-filter: blur(18px);
-    border-radius: 26px;
-    border: 1px solid var(--border);
-    box-shadow: 0 30px 80px rgba(0,0,0,.12);
-    animation: floatIn .8s ease;
+.schedule {
+    background: linear-gradient(180deg, #ffffff, #f6fbff);
+    border-radius: 22px;
+    box-shadow: 0 15px 40px rgba(0,0,0,.08);
+    animation: fadeUp .6s ease both;
 }
 
-@keyframes floatIn {
-    from { opacity: 0; transform: translateY(30px) scale(.95); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+.banner {
+    padding: 20px;
+    margin-bottom: 22px;
 }
 
-/* ---------- SUMMARY ---------- */
 .summary {
+    padding: 20px;
+    margin-bottom: 22px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px,1fr));
-    gap: 14px;
+    gap: 12px;
 }
 
 .summary div {
-    background: linear-gradient(135deg, rgba(255,255,255,.8), rgba(255,255,255,.4));
-    border-radius: 18px;
-    padding: 16px;
+    background: linear-gradient(180deg, #f4fbff, #ffffff);
+    padding: 14px;
+    border-radius: 16px;
     text-align: center;
-    transition: transform .3s ease;
+    transition: transform .25s ease;
 }
 
 .summary div:hover {
-    transform: translateY(-6px) rotateX(8deg);
+    transform: translateY(-4px);
 }
 
-/* ---------- CRUISE CARDS ---------- */
-.cruise {
-    background: linear-gradient(135deg, rgba(255,255,255,.85), rgba(255,255,255,.5));
-    border-radius: 20px;
-    padding: 18px;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: all .35s ease;
+/* ---------- SCHEDULE ---------- */
+.schedule {
+    padding: 22px;
 }
 
-.cruise:hover {
-    transform: translateY(-6px) scale(1.04);
-    box-shadow: 0 20px 50px rgba(29,174,255,.4);
+.day {
+    margin-bottom: 18px;
 }
 
-.cruise.selected {
-    border-color: var(--accent3);
-    box-shadow: 0 0 0 4px rgba(39,255,210,.4);
-    animation: pulse 1.6s infinite;
-}
-
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(39,255,210,.6); }
-    70% { box-shadow: 0 0 0 12px rgba(39,255,210,0); }
-    100% { box-shadow: 0 0 0 0 rgba(39,255,210,0); }
+.day ul {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--muted);
 }
 
 /* ---------- MODAL ---------- */
@@ -209,30 +179,101 @@ main {
 }
 
 .modal-card {
-    animation: modalPop .5s cubic-bezier(.2,1.4,.4,1);
+    background: linear-gradient(180deg, #ffffff, #f4fbff);
+    border-radius: 26px;
+    padding: 26px;
+    width: 100%;
+    max-width: 520px;
+    animation: scaleIn .35s ease;
 }
 
-@keyframes modalPop {
-    from { transform: scale(.7) rotateX(20deg); opacity: 0; }
-    to { transform: scale(1) rotateX(0); opacity: 1; }
+/* ---------- CRUISES ---------- */
+.cruise-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px,1fr));
+    gap: 14px;
+}
+
+.cruise {
+    background: linear-gradient(180deg, #f4fbff, #ffffff);
+    border-radius: 18px;
+    padding: 18px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    text-align: center;
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.cruise:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(29,174,255,.25);
+}
+
+.cruise.selected {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-soft);
+    animation: selectPop .3s ease;
+}
+
+@keyframes selectPop {
+    from { transform: scale(.95); }
+    to { transform: scale(1); }
+}
+
+/* ---------- DAYS ---------- */
+.days {
+    display: flex;
+    gap: 10px;
+    margin: 14px 0 20px;
+}
+
+.days button {
+    flex: 1;
+    padding: 12px;
+    border-radius: 14px;
+    border: 2px solid #d3e9f5;
+    background: #ffffff;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.days button:hover {
+    background: #f1f9ff;
+}
+
+.days button.selected {
+    border-color: var(--accent);
+    background: var(--accent-soft);
 }
 
 /* ---------- CONFETTI ---------- */
 .confetti {
     position: fixed;
-    width: 12px;
-    height: 12px;
-    top: -20px;
-    animation: confettiFall 3s ease forwards;
+    width: 10px;
+    height: 10px;
+    top: -10px;
+    animation: fall 2.8s ease forwards;
 }
 
-@keyframes confettiFall {
+@keyframes fall {
     to {
-        transform: translateY(120vh) rotate(1080deg) scale(.5);
+        transform: translateY(110vh) rotate(720deg);
         opacity: 0;
     }
 }
+
+/* ---------- ANIMATIONS ---------- */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+    from { transform: scale(.92); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
 </style>
+
 
 </head>
 
